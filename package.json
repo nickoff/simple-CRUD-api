@@ -4,10 +4,15 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "format": "npx prettier --write ."
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "jest --silent",
+    "test:verbose": "jest",
+    "build": "tsc src/index.ts",
+    "start": "ts-node src/index.ts",
+    "start:dev": "nodemon",
+    "start:multi": "cross-env MULTI=true nodemon",
+    "start:prod": "tsc && node build/index.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +42,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-promise": "^6.1.1",
     "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
@@ -48,5 +54,8 @@
   "dependencies": {
     "dotenv": "^16.4.2",
     "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
