@@ -1,4 +1,4 @@
 .eslintrc.js
-.evn
+.env
 node_modules
 build
