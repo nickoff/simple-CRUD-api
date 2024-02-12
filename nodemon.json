@@ -1,0 +1,10 @@
+{
+  "ignore": [
+    "node_modules"
+  ],
+  "watch": [
+    "src/index.ts"
+  ],
+  "ext": "ts",
+  "exec": "npx ts-node ./src/index.ts"
+}
