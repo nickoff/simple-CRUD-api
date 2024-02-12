@@ -4,7 +4,7 @@ import { Users } from '../store/users';
 
 const users = new Users();
 
-const requestHandler = (request: IncomingMessage, response: ServerResponse): void => {
+export const requestHandler = (request: IncomingMessage, response: ServerResponse): void => {
   const idParam = request.url?.split('/')[3];
   if (request.url === '/api/users' && request.method === 'GET') {
     response.writeHead(200);
@@ -59,6 +59,15 @@ const requestHandler = (request: IncomingMessage, response: ServerResponse): voi
         response.writeHead(400);
         response.end(JSON.stringify(error.message));
       });
+  } else if (
+    (request.url?.startsWith('/api/users') ?? false) &&
+    request.method === 'DELETE' &&
+    idParam != null &&
+    users.getUserById(idParam) != null
+  ) {
+    response.writeHead(204);
+    users.deleteUserById(idParam);
+    response.end();
   } else {
     response.writeHead(404, { 'Content-Type': 'application/json' });
     response.end('Not found endpoint');
