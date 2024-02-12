@@ -8,11 +8,11 @@
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest --silent",
     "test:verbose": "jest",
-    "build": "tsc src/index.ts",
-    "start": "ts-node src/index.ts",
-    "start:dev": "nodemon",
-    "start:multi": "cross-env MULTI=true nodemon",
-    "start:prod": "tsc && node build/index.js"
+    "build": "npx tsc",
+    "start:dev": "npx nodemon",
+    "start:multidev": "npm run start:dev -- --cluster",
+    "start:prod": "npm run build && node build/index.js",
+    "start:multiprod": "npm run start:prod -- --cluster"
   },
   "repository": {
     "type": "git",

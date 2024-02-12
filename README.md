@@ -11,10 +11,10 @@ This is a simple CRUD API that utilizes an in-memory database. This API allows f
 ## User's guide
 1) You should also add a ```.env``` file to your project with the following content ```PORT={PORT_NUMBER}``` (e.g ```PORT=3000```). If the PORT variable is not specified in the .env file, the server will default to running on port 3000.
 2) Once the setup is complete, you have four modes to start the application:
- - ```npm run dev``` - This will start a single process in development mode.
- - ```npm run prod``` - This will start a single process in production mode.
- - ```npm run multidev``` - This will start a cluster in development mode.
- - ```npm run multiprod``` - This will start a cluster in production mode.
+ - ```npm run start:dev``` - This will start a single process in development mode.
+ - ```npm run start:prod``` - This will start a single process in production mode.
+ - ```npm run start:multidev``` - This will start a cluster in development mode.
+ - ```npm run start:multiprod``` - This will start a cluster in production mode.
 3) In addition to previous steps, test scenarios for the application can also be run. To do this, use the command ```npm run test```. This will execute the test cases defined in the project, helping to ensure that the application is working as expected before deployment.
 
 ## Endpoints

@@ -6,5 +6,5 @@
     "src/index.ts"
   ],
   "ext": "ts",
-  "exec": "npm start"
+  "exec": "npx ts-node ./src/index.ts"
 }
