@@ -33,59 +33,65 @@ const handlePostPutRequest = (
 };
 
 export const requestHandler = (request: IncomingMessage, response: ServerResponse): void => {
-  const idParam = request.url?.split('/')[3];
+  try {
+    const idParam = request.url?.split('/')[3];
 
-  if (request.url === '/favicon.ico') {
-    response.writeHead(200, { 'Content-Type': 'image/x-icon' });
-    response.end();
-  }
-
-  if (idParam == null) {
-    if (request.url === '/api/users' && request.method === 'GET') {
-      response.writeHead(200, { 'Content-Type': 'application/json' });
-      response.end(JSON.stringify(users.getUsers()));
-    } else if (request.url === '/api/users' && request.method === 'POST') {
-      handlePostPutRequest(request, response);
-    } else {
-      response.writeHead(404, { 'Content-Type': 'application/json' });
-      response.end('Not found endpoint');
+    if (request.url === '/favicon.ico') {
+      response.writeHead(200, { 'Content-Type': 'image/x-icon' });
+      response.end();
     }
-  }
 
-  if (idParam != null) {
-    if (validate(idParam)) {
-      if (
-        (request.url?.startsWith('/api/users') ?? false) &&
-        request.method === 'GET' &&
-        idParam != null &&
-        users.getUserById(idParam) != null
-      ) {
+    if (idParam == null) {
+      if (request.url === '/api/users' && request.method === 'GET') {
         response.writeHead(200, { 'Content-Type': 'application/json' });
-        response.end(JSON.stringify(users.getUserById(idParam)));
-      } else if (
-        (request.url?.startsWith('/api/users') ?? false) &&
-        request.method === 'PUT' &&
-        idParam != null &&
-        users.getUserById(idParam) != null
-      ) {
-        handlePostPutRequest(request, response, idParam);
-      } else if (
-        (request.url?.startsWith('/api/users') ?? false) &&
-        request.method === 'DELETE' &&
-        idParam != null &&
-        users.getUserById(idParam) != null
-      ) {
-        response.writeHead(204, { 'Content-Type': 'application/json' });
-        users.deleteUserById(idParam);
-        response.end();
+        response.end(JSON.stringify(users.getUsers()));
+      } else if (request.url === '/api/users' && request.method === 'POST') {
+        handlePostPutRequest(request, response);
       } else {
         response.writeHead(404, { 'Content-Type': 'application/json' });
         response.end('Not found endpoint');
       }
-    } else {
-      response.writeHead(400, { 'Content-Type': 'application/json' });
-      response.end('Invalid id');
     }
+
+    if (idParam != null) {
+      if (validate(idParam)) {
+        if (
+          (request.url?.startsWith('/api/users') ?? false) &&
+          request.method === 'GET' &&
+          idParam != null &&
+          users.getUserById(idParam) != null
+        ) {
+          response.writeHead(200, { 'Content-Type': 'application/json' });
+          response.end(JSON.stringify(users.getUserById(idParam)));
+        } else if (
+          (request.url?.startsWith('/api/users') ?? false) &&
+          request.method === 'PUT' &&
+          idParam != null &&
+          users.getUserById(idParam) != null
+        ) {
+          handlePostPutRequest(request, response, idParam);
+        } else if (
+          (request.url?.startsWith('/api/users') ?? false) &&
+          request.method === 'DELETE' &&
+          idParam != null &&
+          users.getUserById(idParam) != null
+        ) {
+          response.writeHead(204, { 'Content-Type': 'application/json' });
+          users.deleteUserById(idParam);
+          response.end();
+        } else {
+          response.writeHead(404, { 'Content-Type': 'application/json' });
+          response.end('Not found endpoint');
+        }
+      } else {
+        response.writeHead(400, { 'Content-Type': 'application/json' });
+        response.end('Invalid id');
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    response.writeHead(500, { 'Content-Type': 'application/json' });
+    response.end('Internal server error');
   }
 };
 
