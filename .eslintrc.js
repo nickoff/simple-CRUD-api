@@ -30,7 +30,6 @@ module.exports = {
   rules: {
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
-    'max-lines-per-function': ['error', 40],
     'no-console': 'off'
   },
 };
