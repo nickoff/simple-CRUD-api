@@ -22,9 +22,9 @@ const requestHandler = (request: IncomingMessage, response: ServerResponse): voi
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
         response.writeHead(400);
-        response.end();
+        response.end(JSON.stringify(error.message));
       });
   } else if (request.url === '/favicon.ico') {
     response.writeHead(200, { 'Content-Type': 'image/x-icon' });
@@ -37,9 +37,31 @@ const requestHandler = (request: IncomingMessage, response: ServerResponse): voi
   ) {
     response.writeHead(200);
     response.end(JSON.stringify(users.getUserById(idParam)));
+  } else if (
+    (request.url?.startsWith('/api/users') ?? false) &&
+    request.method === 'PUT' &&
+    idParam != null &&
+    users.getUserById(idParam) != null
+  ) {
+    parseBody(request)
+      .then((newUser) => {
+        if (newUser === null) {
+          response.writeHead(400);
+          response.end();
+        } else {
+          users.updateUserById(idParam, newUser);
+          response.writeHead(201);
+          response.end();
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        response.writeHead(400);
+        response.end(JSON.stringify(error.message));
+      });
   } else {
     response.writeHead(404, { 'Content-Type': 'application/json' });
-    response.end('Error 404: Page not found!');
+    response.end('Not found endpoint');
   }
 };
 
