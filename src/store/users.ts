@@ -30,10 +30,11 @@ export class Users {
     await fs.writeFile(dbPath, JSON.stringify(this.users, null, 2), 'utf-8');
   }
 
-  public async addUser(data: UserModel): Promise<void> {
+  public async addUser(data: UserModel): Promise<UserModel> {
     const user = { id: uuidv4(), ...data };
     this.users = [...this.users, user];
     await this.writeDb();
+    return user;
   }
 
   public async getUsers(): Promise<UserModel[]> {
@@ -51,8 +52,9 @@ export class Users {
     await this.writeDb();
   }
 
-  public async updateUserById(id: string, data: UserModel): Promise<void> {
+  public async updateUserById(id: string, data: UserModel): Promise<UserModel> {
     this.users = this.users.map((user) => (user.id === id ? { ...user, ...data } : user));
     await this.writeDb();
+    return { id, ...data };
   }
 }

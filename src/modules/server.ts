@@ -12,17 +12,18 @@ const handlePostPutRequest = (
 ): void => {
   parseBody(request)
     .then(async (newUser) => {
+      let user;
       if (newUser === null) {
         response.writeHead(400, { 'Content-Type': 'application/json' });
         response.end();
       } else {
         if (idParam != null) {
-          await users.updateUserById(idParam, newUser);
+          user = await users.updateUserById(idParam, newUser);
         } else {
-          await users.addUser(newUser);
+          user = await users.addUser(newUser);
         }
         response.writeHead(201, { 'Content-Type': 'application/json' });
-        response.end();
+        response.end(JSON.stringify(user));
       }
     })
     .catch((error) => {
