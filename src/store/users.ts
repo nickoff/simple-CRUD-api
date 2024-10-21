@@ -16,13 +16,8 @@ export class Users {
     try {
       const fileContent = await fs.readFile(dbPath, 'utf-8');
       this.users = JSON.parse(fileContent);
-    } catch (err) {
-      const error = err as NodeJS.ErrnoException;
-      if (error.code === 'ENOENT') {
-        await this.writeDb();
-      } else {
-        throw err;
-      }
+    } catch {
+      await this.writeDb();
     }
   }
 
