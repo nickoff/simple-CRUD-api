@@ -41,3 +41,27 @@ describe('Scenario 2. Test POST method', () => {
     expect(response.body.age).toEqual(mockUser.age);
   });
 });
+
+describe('Scenario 3. Test PUT method', () => {
+  const mockUser = {
+    username: 'Mikola',
+    age: 40,
+    hobbies: [],
+  };
+
+  const mockUpdateUser = {
+    username: 'Nick',
+    age: 40,
+    hobbies: [],
+  };
+
+  test('PUT /api/users should update user with id === userId if it exists.', async () => {
+    const responsePost = await request(server).post('/api/users').send(mockUser);
+    const { id } = responsePost.body;
+
+    const responsePut = await request(server).put(`/api/users/${id}`).send(mockUpdateUser);
+
+    expect(responsePut.status).toBe(200);
+    expect(responsePut.body.username).toEqual(mockUpdateUser.username);
+  });
+});
