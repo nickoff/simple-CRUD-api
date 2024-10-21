@@ -11,15 +11,15 @@ const handlePostPutRequest = (
   idParam?: string | undefined,
 ): void => {
   parseBody(request)
-    .then((newUser) => {
+    .then(async (newUser) => {
       if (newUser === null) {
         response.writeHead(400, { 'Content-Type': 'application/json' });
         response.end();
       } else {
         if (idParam != null) {
-          users.updateUserById(idParam, newUser);
+          await users.updateUserById(idParam, newUser);
         } else {
-          users.addUser(newUser);
+          await users.addUser(newUser);
         }
         response.writeHead(201, { 'Content-Type': 'application/json' });
         response.end();
@@ -32,7 +32,7 @@ const handlePostPutRequest = (
     });
 };
 
-export const requestHandler = (request: IncomingMessage, response: ServerResponse): void => {
+export const requestHandler = async (request: IncomingMessage, response: ServerResponse): Promise<void> => {
   try {
     const idParam = request.url?.split('/')[3];
 
@@ -44,7 +44,7 @@ export const requestHandler = (request: IncomingMessage, response: ServerRespons
     if (idParam == null) {
       if (request.url === '/api/users' && request.method === 'GET') {
         response.writeHead(200, { 'Content-Type': 'application/json' });
-        response.end(JSON.stringify(users.getUsers()));
+        response.end(JSON.stringify(await users.getUsers()));
       } else if (request.url === '/api/users' && request.method === 'POST') {
         handlePostPutRequest(request, response);
       } else {
@@ -59,15 +59,15 @@ export const requestHandler = (request: IncomingMessage, response: ServerRespons
           (request.url?.startsWith('/api/users') ?? false) &&
           request.method === 'GET' &&
           idParam != null &&
-          users.getUserById(idParam) != null
+          (await users.getUserById(idParam)) != null
         ) {
           response.writeHead(200, { 'Content-Type': 'application/json' });
-          response.end(JSON.stringify(users.getUserById(idParam)));
+          response.end(JSON.stringify(await users.getUserById(idParam)));
         } else if (
           (request.url?.startsWith('/api/users') ?? false) &&
           request.method === 'PUT' &&
           idParam != null &&
-          users.getUserById(idParam) != null
+          (await users.getUserById(idParam)) != null
         ) {
           handlePostPutRequest(request, response, idParam);
         } else if (
@@ -77,7 +77,7 @@ export const requestHandler = (request: IncomingMessage, response: ServerRespons
           users.getUserById(idParam) != null
         ) {
           response.writeHead(204, { 'Content-Type': 'application/json' });
-          users.deleteUserById(idParam);
+          await users.deleteUserById(idParam);
           response.end();
         } else {
           response.writeHead(404, { 'Content-Type': 'application/json' });
@@ -95,7 +95,12 @@ export const requestHandler = (request: IncomingMessage, response: ServerRespons
   }
 };
 
-const server = http.createServer(requestHandler);
+const server = http.createServer((request, response) => {
+  requestHandler(request, response).catch(() => {
+    response.writeHead(500, { 'Content-Type': 'text/plain' });
+    response.end('Internal Server Error');
+  });
+});
 
 export const startServer = (port: number): void => {
   server.listen(port, () => {

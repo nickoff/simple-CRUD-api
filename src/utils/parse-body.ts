@@ -4,7 +4,12 @@ import { type UserModel } from 'models/user.model';
 function isUserModel(user: UserModel): boolean {
   if ('username' in user && 'age' in user && 'hobbies' in user) {
     const { username, age, hobbies } = user;
-    return typeof username === 'string' && typeof age === 'number' && Array.isArray(hobbies);
+    return (
+      typeof username === 'string' &&
+      typeof age === 'number' &&
+      Array.isArray(hobbies) &&
+      hobbies.every((element) => typeof element === 'string')
+    );
   }
   return false;
 }

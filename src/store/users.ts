@@ -1,27 +1,58 @@
 import { type UserModel } from 'models/user.model';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs/promises';
+import path from 'path';
+
+const dbPath = path.join(__dirname, 'db.json');
 
 export class Users {
   private users: UserModel[] = [];
 
-  public addUser(data: UserModel): void {
-    const user = { id: uuidv4(), ...data };
-    this.users = [...this.users, user];
+  constructor() {
+    void this.readDb();
   }
 
-  public getUsers(): UserModel[] {
+  private async readDb(): Promise<void> {
+    try {
+      const fileContent = await fs.readFile(dbPath, 'utf-8');
+      this.users = JSON.parse(fileContent);
+    } catch (err) {
+      const error = err as NodeJS.ErrnoException;
+      if (error.code === 'ENOENT') {
+        await this.writeDb();
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  private async writeDb(): Promise<void> {
+    await fs.writeFile(dbPath, JSON.stringify(this.users, null, 2), 'utf-8');
+  }
+
+  public async addUser(data: UserModel): Promise<void> {
+    const user = { id: uuidv4(), ...data };
+    this.users = [...this.users, user];
+    await this.writeDb();
+  }
+
+  public async getUsers(): Promise<UserModel[]> {
+    await this.readDb();
     return this.users;
   }
 
-  public getUserById(id: string): UserModel | undefined {
+  public async getUserById(id: string): Promise<UserModel | undefined> {
+    await this.readDb();
     return this.users.find((user) => user.id === id);
   }
 
-  public deleteUserById(id: string): void {
+  public async deleteUserById(id: string): Promise<void> {
     this.users = this.users.filter((user) => user.id !== id);
+    await this.writeDb();
   }
 
-  public updateUserById(id: string, data: UserModel): void {
+  public async updateUserById(id: string, data: UserModel): Promise<void> {
     this.users = this.users.map((user) => (user.id === id ? { ...user, ...data } : user));
+    await this.writeDb();
   }
 }
