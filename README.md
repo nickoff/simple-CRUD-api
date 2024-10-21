@@ -13,8 +13,8 @@ This is a simple CRUD API that utilizes an in-memory database. This API allows f
 2) Once the setup is complete, you have four modes to start the application:
  - ```npm run start:dev``` - This will start a single process in development mode.
  - ```npm run start:prod``` - This will start a single process in production mode.
- - ```npm run start:multidev``` - This will start a cluster in development mode.
- - ```npm run start:multiprod``` - This will start a cluster in production mode.
+ - ```npm run start:multi``` - This will start a cluster in development mode.
+ - ```npm run start:prodmulti``` - This will start a cluster in production mode.
 3) In addition to previous steps, test scenarios for the application can also be run. To do this, use the command ```npm run test```. This will execute the test cases defined in the project, helping to ensure that the application is working as expected before deployment.
 
 ## Endpoints

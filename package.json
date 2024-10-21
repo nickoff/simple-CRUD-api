@@ -6,13 +6,12 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "jest --silent",
-    "test:verbose": "jest",
+    "test": "jest",
     "build": "npx tsc",
     "start:dev": "npx nodemon",
-    "start:multidev": "npm run start:dev -- --cluster",
+    "start:multi": "npm run start:dev -- --cluster",
     "start:prod": "npm run build && node build/index.js",
-    "start:multiprod": "npm run start:prod -- --cluster"
+    "start:prodmulti": "npm run start:prod -- --cluster"
   },
   "repository": {
     "type": "git",
@@ -27,6 +26,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.17",
+    "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
     "@types/webpack": "^5.28.5",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -44,6 +44,7 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.2.5",
+    "supertest": "^7.0.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",

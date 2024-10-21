@@ -22,6 +22,12 @@ module.exports = {
         sourceType: 'script',
       },
     },
+    {
+      "files": ["jest.config.js"],
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "off"
+      }
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest',

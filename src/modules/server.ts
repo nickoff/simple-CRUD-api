@@ -93,7 +93,7 @@ export const requestHandler = async (request: IncomingMessage, response: ServerR
   }
 };
 
-const server = http.createServer((request, response) => {
+export const server = http.createServer((request, response) => {
   requestHandler(request, response).catch(() => {
     response.writeHead(500, { 'Content-Type': 'text/plain' });
     response.end('Internal Server Error');

@@ -20,6 +20,6 @@
     "strictPropertyInitialization": false,
     "target": "ES2020"
   },
-    "include": ["./index.ts", "src/**/*"],
-    "exclude": ["node_modules", "tests/**/*"]
+    "include": ["./index.ts", "src/**/*", "jest.config.ts"],
+    "exclude": ["node_modules"]
 }
