@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "start:dev": "npx nodemon",
     "start:multi": "npm run start:dev -- --cluster",
-    "start:prod": "npm run build && node build/index.js",
+    "start:prod": "npm run build && node build/src/index.js",
     "start:prodmulti": "npm run start:prod -- --cluster"
   },
   "repository": {
